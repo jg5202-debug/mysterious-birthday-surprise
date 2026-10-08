@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#fff8ed">
+<title>小白包的 23 岁生日惊喜</title><meta name="description" content="送给小白包的 23 岁生日惊喜，转一转，把好运和偏爱一起带走。">
+<style>html{background:#fff8ed}body.welcome-active{overflow:hidden}body.welcome-active>header,body.welcome-active>main{visibility:hidden;pointer-events:none}</style>
+<link rel="icon" type="image/svg+xml" href="assets/puppy-favicon.svg">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="games.css">
+<link rel="stylesheet" href="interactions.css">
+<link rel="stylesheet" href="scenes.css">
+<link rel="stylesheet" href="letter.css">
+<link rel="stylesheet" href="memories.css">
+</head>
+<body class="welcome-active">
+<section class="welcome" id="welcome" aria-labelledby="welcome-title">
+ <div class="welcome-sparkles" aria-hidden="true"><i>✦</i><i>✧</i><i>✦</i><i>✧</i><i>✦</i><i>✧</i></div>
+ <div class="welcome-content">
+  <p class="welcome-postmark"><span class="dog-head" aria-hidden="true"><img src="assets/yellow-head-cutout.png" alt=""></span> 鸡毛的生日特别派送</p>
+  <p class="eyebrow">A LITTLE SURPRISE, JUST FOR YOU</p>
+  <h1 id="welcome-title">白白大王，<br>生日快乐<span>！</span></h1>
+  <p class="welcome-message">23 岁的第一份好运，已经准备好啦。</p>
+  <div class="welcome-parcel" aria-label="小白和小金毛带着蛋糕与礼物来庆祝生日">
+   <div class="welcome-sticker welcome-cake"><img src="assets/welcome-cake.jpg" alt="小狗陪着生日蛋糕" fetchpriority="high" width="1298" height="2804"></div>
+   <div class="welcome-sticker welcome-gift"><img src="assets/welcome-white-gift.jpg" alt="小白从生日礼物盒里探出头" fetchpriority="high" width="1440" height="1440"><span class="parcel-label">TO 小白包 · 23 岁限定</span></div>
+   <div class="welcome-sticker welcome-golden"><img src="assets/welcome-golden-gift.jpg" alt="小金毛带来生日礼物" fetchpriority="high" width="1440" height="1440"></div>
+   <span class="birthday-seal" aria-hidden="true">23<small>HAPPY BIRTHDAY</small></span>
+  </div>
+  <button class="draw-button welcome-open" id="enter-birthday" disabled>拆开鸡毛的生日惊喜 <span aria-hidden="true">✦</span></button>
+  <p class="welcome-bottom">今天白白大王最大！</p>
+ </div>
+</section>
+<div class="music-dock" id="music-dock" hidden>
+ <button class="music-toggle" id="music-toggle" aria-label="播放生日背景音乐" aria-pressed="false"><span class="dog-head" aria-hidden="true"><img src="assets/yellow-head-cutout.png" alt=""></span><span class="music-bars" aria-hidden="true"><i></i><i></i><i></i></span><span id="music-label">播放音乐</span></button>
+ <span class="music-status" id="music-status" role="status" aria-live="polite"></span>
+</div>
+<audio id="birthday-bgm" loop preload="none"></audio>
+<div class="confetti" aria-hidden="true" id="confetti"></div>
+<header inert><a class="brand" href="./"><span class="brand-icon dog-head brand-head" aria-hidden="true"><img src="assets/yellow-head-cutout.png" alt=""></span> 小狗的生日惊喜</a><span class="header-note">今天白白大王最大！ <span class="dog-head" aria-hidden="true"><img src="assets/puppy-head-cutout.png" alt=""></span></span></header>
+<main inert>
+<div class="intro"><div class="intro-copy"><p class="eyebrow">HAPPY 23RD BIRTHDAY</p><h1 id="greeting">小白包，<br>23 岁生日快乐<span>！</span></h1><p>今天，你的好运被鸡毛承包啦！</p></div><div class="age-puppies" role="img" aria-label="两只线条小狗分别抱着数字2和3，庆祝23岁生日"><img class="age-pair" src="assets/puppies-23-white.png" alt="" width="1792" height="896"></div></div>
+<div class="play-layout">
+<section class="draw-card" aria-label="生日抽奖转盘">
+<div class="card-heading"><span class="little-tag">生日限定 · 100% 中奖</span><span class="chance" id="chances">还有 <strong>3</strong> 次惊喜</span></div>
+<div class="game-intro"><p class="game-label">白白大王的生日闯关</p><div class="game-track" id="game-track" aria-label="三关生日小游戏"></div><p id="game-progress" role="status" aria-live="polite"></p><small id="game-rules-note"></small></div>
+<div class="wheel-stage"><div class="wheel-frame"><canvas id="wheel" width="600" height="600" role="img" aria-label="八个甜蜜奖品的生日转盘"></canvas><div class="wheel-center"><img class="wheel-face" src="assets/puppy-face.jpg" width="1080" height="1080" alt="小白的笑脸"></div></div><div class="pointer" aria-hidden="true"></div></div>
+<button class="draw-button" id="draw">抽一份小幸运 <span aria-hidden="true">✦</span></button>
+<div class="draw-companion"><img src="assets/puppy-cake.jpg" alt="捧着小蛋糕庆祝的小白" width="1440" height="1440"><p class="draw-hint" id="hint" role="status" aria-live="polite">每一份礼物，都是想让白白开心的心意。</p></div>
+</section>
+<aside class="side-column">
+<section class="letter-card" id="birthday-letter"><div class="letter-message" id="letter-message"><span class="stamp" aria-hidden="true">WITH<br>LOVE <span class="dog-head" aria-hidden="true"><img src="assets/puppy-head-cutout.png" alt=""></span></span><p class="letter-label">小狗陪你过 23 岁生日</p><img class="puppy-art" src="assets/party-friends.jpg" width="1440" height="1440" alt="戴着生日帽的小白和小黄一起祝你生日快乐"><h2>全世界最可爱的你，</h2><p id="love-note">愿你的 23 岁，<br>有数不完的开心，<br>也有一直陪着你的我。</p><span class="signature">爱你的鸡毛 <span class="dog-head" aria-hidden="true"><img src="assets/yellow-head-cutout.png" alt=""></span></span></div><div class="scratch-cover" id="scratch-cover"><canvas id="scratch-coat" role="img" aria-label="生日刮刮卡，用手指或鼠标刮开鸡毛的悄悄话"></canvas><button id="scratch-open" type="button">也可以点这里，拆开悄悄话</button></div><span class="sr-only" id="scratch-status" role="status" aria-live="polite"></span></section>
+<section class="gifts-card"><div class="section-heading"><h2>今天的惊喜清单</h2><span>8 份偏爱</span></div><p class="card-gallery-hint">未拆开的心意藏在牌背里，抽中后就会翻开点亮。</p><div class="prize-list gift-card-grid" id="prize-list"></div><p class="gift-footnote">没有“谢谢参与”，只有“小鸡毛的满满的爱”。</p></section>
+</aside>
+</div>
+<section class="collection" id="collection" tabindex="-1" hidden><div class="section-heading"><h2>白白的兑奖信封</h2><span>每一张，都由鸡毛兑现 <span class="dog-head" aria-hidden="true"><img src="assets/yellow-head-cutout.png" alt=""></span></span></div><p id="collection-summary"></p><div class="ticket-list envelope-summary" id="ticket-list"></div><button class="collection-letter-button" id="read-birthday-letter" type="button" hidden><span class="dog-head" aria-hidden="true"><img src="assets/yellow-head-cutout.png" alt=""></span>读一读鸡毛写给白白的信</button></section>
+<section class="birthday-scenes" aria-label="小狗的生日祝福">
+ <article class="interactive-scene wish-scene" aria-labelledby="wish-title">
+  <div class="scene-copy"><p class="eyebrow">MAKE A LITTLE WISH</p><h2 id="wish-title">白白，许一个生日愿望。</h2><p>闭上眼睛，把愿望藏好，再轻轻吹一口气。</p></div>
+  <div class="birthday-stage wish-stage wish-illustrated" id="wish-stage" role="img" aria-label="两只小狗陪白白许愿，生日蛋糕上亮着三根蜡烛"><img class="wish-illustration" src="assets/wish-cake-party-v2.png" alt="" width="1512" height="1040" loading="lazy" decoding="async"><div class="wish-ambient" aria-hidden="true"></div><div class="illustrated-candles" aria-hidden="true"><i class="birthday-candle illustrated-candle"><span class="candle-flame"><svg viewBox="0 0 24 36" aria-hidden="true"><path d="M12 2C10 10 3 15 3 23c0 14 19 14 19 0 0-8-7-14-10-21Z" fill="#ffb95a" stroke="#3c2a27" stroke-width="2.7" stroke-linejoin="round"/><path d="M12 17c-1 4-5 7-5 11 0 7 10 7 10 0 0-4-3-7-5-11Z" fill="#fff5a8"/></svg></span><em class="candle-smoke"><svg viewBox="0 0 24 50" aria-hidden="true"><path d="M12 47C-1 32 27 28 12 16 6 11 9 6 15 2" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg></em></i><i class="birthday-candle illustrated-candle"><span class="candle-flame"><svg viewBox="0 0 24 36" aria-hidden="true"><path d="M12 2C10 10 3 15 3 23c0 14 19 14 19 0 0-8-7-14-10-21Z" fill="#ffb95a" stroke="#3c2a27" stroke-width="2.7" stroke-linejoin="round"/><path d="M12 17c-1 4-5 7-5 11 0 7 10 7 10 0 0-4-3-7-5-11Z" fill="#fff5a8"/></svg></span><em class="candle-smoke"><svg viewBox="0 0 24 50" aria-hidden="true"><path d="M12 47C-1 32 27 28 12 16 6 11 9 6 15 2" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg></em></i><i class="birthday-candle illustrated-candle"><span class="candle-flame"><svg viewBox="0 0 24 36" aria-hidden="true"><path d="M12 2C10 10 3 15 3 23c0 14 19 14 19 0 0-8-7-14-10-21Z" fill="#ffb95a" stroke="#3c2a27" stroke-width="2.7" stroke-linejoin="round"/><path d="M12 17c-1 4-5 7-5 11 0 7 10 7 10 0 0-4-3-7-5-11Z" fill="#fff5a8"/></svg></span><em class="candle-smoke"><svg viewBox="0 0 24 50" aria-hidden="true"><path d="M12 47C-1 32 27 28 12 16 6 11 9 6 15 2" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg></em></i></div><svg class="wish-breeze" viewBox="0 0 300 120" aria-hidden="true"><path d="M5 91C63 104 60 38 132 40s64 18 144-29M4 114C76 121 100 69 180 73s69-14 103-26" fill="none" stroke="#fffdf4" stroke-width="3" stroke-linecap="round"/></svg><span class="wish-finished" aria-hidden="true">✦ 愿望出发啦 ✦</span></div>
+  <div class="blow-progress" id="blow-progress" role="progressbar" aria-label="吹灭蜡烛的进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span></span></div>
+  <p class="wish-status" id="wish-status" role="status" aria-live="polite">先许愿，再把 3 簇烛光轻轻吹灭。</p>
+  <div class="wish-actions"><button class="scene-button primary blow-hold" id="blow-hold" type="button">轻轻吹一口气</button><button class="scene-button" id="blow-mic" type="button" aria-pressed="false">用麦克风吹气</button><button class="scene-button" id="wish-reset" type="button" hidden>再许一个愿</button></div>
+  <p class="scene-small-note">按住按钮，或轻点三下。<br><span class="microphone-note">麦克风仅在点击后开启，不录音。</span></p>
+ </article>
+ <article class="interactive-scene video-scene" aria-labelledby="video-title">
+  <div class="scene-copy"><p class="eyebrow">A BIRTHDAY MESSAGE, JUST FOR YOU</p><h2 id="video-title">狗狗动画放映厅</h2><p>小鸡毛和小小白的快乐日常，给白白一点小小的开心。</p></div>
+  <div class="birthday-stage theater-stage">
+   <video class="birthday-video" id="birthday-greeting-video" controls playsinline preload="none" hidden poster="assets/birthday-greeting-poster.jpg" aria-label="小鸡毛和小小白的快乐日常视频"></video>
+   <div class="video-placeholder" id="greeting-placeholder"><img class="theater-poster" src="assets/birthday-greeting-poster.jpg" alt="两只小狗的快乐日常视频封面"><strong>小狗的快乐日常</strong><p id="video-pending">鸡毛的祝福视频，正在赶来。</p><button class="scene-button primary" id="greeting-play" type="button" hidden>播放小狗的快乐日常</button></div>
+  </div>
+  <div class="video-actions" id="video-actions"><button class="scene-button primary" id="greeting-skip" type="button">结束放映</button><button class="scene-button" id="greeting-replay" type="button" hidden>再看一次小狗日常</button></div>
+  <p class="video-state" id="video-state" role="status" aria-live="polite">送给白白的一小段快乐，轻轻点开就能看。</p>
+ </article>
+</section><footer><span class="footer-message">不只是生日，<br>每一个平常的日子<br class="footer-mobile-break">都有鸡毛陪你度过。</span><span class="dog-head" aria-hidden="true"><img src="assets/yellow-head-cutout.png" alt=""></span></footer>
+</main>
+<dialog id="redemption-envelope" aria-labelledby="redemption-title"><div class="redemption-content"><button class="close" id="redemption-close" type="button" aria-label="收好兑奖清单">×</button><p class="eyebrow">YOUR LITTLE LUCK, ALL IN ONE LETTER</p><div class="redemption-envelope-scene"><div class="redemption-envelope-back" aria-hidden="true"></div><div class="redemption-envelope-flap" aria-hidden="true"></div><article class="redemption-paper"><p class="redemption-paper-to">TO 白白大王 · FROM 鸡毛</p><h2 id="redemption-title">白白的生日兑奖清单</h2><p id="redemption-subtitle"></p><ol id="redemption-prizes"></ol><p class="redemption-paper-signature">每一张，都由鸡毛兑现 <img src="assets/yellow-head-cutout.png" alt="" aria-hidden="true"></p></article><div class="redemption-envelope-pocket" aria-hidden="true"><span>小白包的生日专属礼券</span><img src="assets/puppy-head-cutout.png" alt=""></div></div><button class="scene-button primary" id="redemption-done" type="button">收好这份兑奖清单</button></div></dialog>
+<dialog id="birthday-finale" aria-labelledby="finale-title"><div class="finale-content"><p class="eyebrow">ALL YOUR LITTLE LUCK, WITH LOVE</p><div class="envelope-scene" aria-label="三张生日礼券收进信封"><div class="envelope-back"></div><div id="envelope-tickets"></div><div class="envelope-pocket"></div><div class="envelope-flap"></div><span class="dog-head envelope-seal" aria-hidden="true"><img src="assets/yellow-head-cutout.png" alt=""></span><span class="envelope-label">TO 小白包 · FROM 鸡毛</span></div><h2 id="finale-title">礼物都拆完啦，<br>快找鸡毛大王兑奖吧！</h2><p>三份小幸运装好啦，每一张都由鸡毛兑现。</p><button class="draw-button" id="finale-close">收好礼券，看看鸡毛的信</button></div></dialog>
+<dialog id="birthday-letter-ending" aria-labelledby="letter-arrival-title">
+ <section class="letter-arrival" id="letter-arrival">
+  <p class="eyebrow">A LETTER, JUST FOR YOU</p><h2 id="letter-arrival-title">还有一封信，<br>想交到宝宝手里。</h2><p>礼物收好啦，鸡毛还有些话想对你说。</p>
+  <button class="personal-envelope" id="open-birthday-letter" type="button" aria-label="拆开鸡毛写给白白的生日信">
+   <span class="personal-envelope-back" aria-hidden="true"></span><span class="personal-envelope-note" aria-hidden="true">宝宝，生日快乐！</span><span class="personal-envelope-pocket" aria-hidden="true"></span><span class="personal-envelope-flap" aria-hidden="true"></span><span class="personal-envelope-seal" aria-hidden="true"><span class="dog-head"><img src="assets/yellow-head-cutout.png" alt=""></span></span><span class="personal-envelope-address" aria-hidden="true">TO 白白大王 · FROM 鸡毛</span>
+  </button><p class="letter-tap-hint">轻轻点一下，拆开这封信。</p><button class="letter-arrival-back" id="letter-arrival-back" type="button">先看看我的礼券</button>
+ </section>
+ <section class="letter-reader" id="letter-reader" hidden>
+  <nav class="letter-toolbar" aria-label="读信操作"><button class="letter-text-button" id="letter-reader-back" type="button">← 收好这封信</button><button class="letter-music-toggle" id="letter-music-toggle" type="button" aria-label="播放读信背景音乐" aria-pressed="false"><span class="music-bars" aria-hidden="true"><i></i><i></i><i></i></span><span id="letter-music-label">播放音乐</span></button></nav><p id="letter-audio-status" class="letter-audio-status" role="status" aria-live="polite"></p>
+  <article class="letter-paper" aria-labelledby="letter-reader-title"><div class="letter-paper-topline"><span>TO 白白大王 · 23 岁生日限定</span><span class="letter-postage" aria-hidden="true">WITH LOVE <span class="dog-head"><img src="assets/puppy-head-cutout.png" alt=""></span></span></div><h1 id="letter-reader-title" tabindex="-1">写给我的宝宝</h1><p class="letter-paper-subtitle">一些想慢慢说给你听的话。</p><div class="birthday-letter-copy"><p class="letter-salutation">宝宝，生日快乐！</p>
+<p>这是我们在一起之后，我给你过的第二个生日，也是你的23岁生日。可惜今年我在美国，没办法在你身边陪你吃蛋糕、吹蜡烛。还是觉得挺遗憾的，所以这段时间一直在想，隔着这么远，能做点什么让你开心，给你留下一个特别一点的生日回忆。</p>
+<p>说来惭愧，去年我明明就在国内，也没有好好给你过生日，还惹你不开心了。现在想起来，确实是我做得不好，对不起宝宝。以前总觉得我们每天都能见面，很多事情还有机会，结果反而没把一些本来应该做好的事情放在心上。今年分开了，才更加觉得，能在你身边陪你过生日，是一件多好的事。</p>
+<p>来美国以后，我经常想起大学最后两年。那时候我们每天一起吃午饭，想喝酒了、想看电影了、想去KTV了，商量一下就能出发。现在想再和你一起吃顿饭，都要等好久。以前觉得很普通的日常，现在想起来，每一件都很舍不得。</p>
+<p>我有时也会想，如果大四早点认真准备北美求职，现在是不是能轻松一点。但真让我重新选一次，我还是舍不得少花那些时间陪你。大四和你一起留下的回忆，以后赚多少钱都换不回来。所以，我并不后悔。现在该努力的事情，我会继续努力，那一年和你在一起的日子，我也会一直记得。</p>
+<p>刚到美国的那两天，我特别不适应，做什么都觉得，要是你在旁边就好了。到现在也还是这样，只是慢慢习惯了这里的生活。有时候忙了一整天，还是很想看看你，听你说说话。</p>
+<p>最近要准备的东西确实很多。决定在北美求职之后，感觉时间一下就不够用了，再加上转码的学业压力，每天都有新的知识和技能要学。有时候事情堆在一起，我真的会觉得有点喘不过气。</p>
+<p>这些情况我想和你说清楚，因为有时候我没有及时问你的事情，或者你跟我说话的时候，我反应慢、没接好话，你可能会觉得我不关心你。其实你的事情我一直放在心上，只是最近有时脑子里装的东西太多，没能把关心表达出来。</p>
+<p>但我也知道，光在心里想着是不够的。你需要我的时候，没得到回应，还是会难受。这些地方我得改，也得更早告诉你我的安排，不能让你自己猜我在做什么，更不能因为我忙，就一直让你迁就我。</p>
+<p>有一点我很确定：我从来没有因为时间紧张，就想过干脆不和你打电话了。每天能和你聊一会儿，对我来说很重要。我想知道你今天过得怎么样，想听你说开心的事，也想听你吐槽那些烦人的事。有时候我们也没聊什么特别的，但看着你，就觉得这一天好像舒服了不少。</p>
+<p>换成以前的我，可能一忙就会说“今天不打视频了”，然后只顾着自己的事情。和你在一起这两年，我也慢慢意识到，谈恋爱不能一直只考虑自己。我选择和你在一起，就应该认真照顾你的感受，把我们两个人的事情也放进我的安排里。</p>
+<p>我知道，你为了我做了很多退让，也一直在努力适应现在的异国恋。这些我都看得到。谢谢宝宝愿意理解我，但我也不希望你总是委屈自己。有什么不开心的，你就告诉我；想让我多陪陪你，也可以直接说。我对这段感情是认真的，也会在需要取舍的时候更果断一点，让你能够踏踏实实地相信我。</p>
+<p>宝宝，我希望你的23岁过得开心一点。做自己想做的事情，去自己想去的地方，也别给自己太多压力。累了就休息，遇到烦心事就来找我说，鸡毛可能有时候嘴笨，但会认真听。</p>
+<p>我也会努力把这边的生活和未来的事情安排好，争取早点再见到你。到时候我们一起吃饭、看电影，再去做那些现在只能在电话里说“好想一起去”的事情。</p>
+<p>今年的生日，我先把能准备的心意都送到你面前。希望你拆礼物的时候会开心，希望你喜欢我给你做的这些小惊喜，也希望你能感觉到，我虽然人不在你身边，但一直惦记着你。</p>
+<p>生日快乐，我的白白大王。23岁的第一天，要开开心心的。</p>
+<p>等见面了，给你一个大大的狗狗抱，再好好亲亲你。</p></div><p class="letter-paper-signature">爱你的鸡毛 <span class="dog-head" aria-hidden="true"><img src="assets/yellow-head-cutout.png" alt=""></span></p><p class="letter-paper-tail">HAPPY 23RD BIRTHDAY, MY BAIBAI</p></article>
+  <div class="letter-reader-end"><button class="draw-button" id="letter-finish" type="button">把这封信收好</button><p class="letter-track-caption">陪你读信：10cm · 봄눈</p></div>
+ </section>
+ <section class="memory-montage" id="memory-montage" hidden aria-labelledby="memory-title">
+  <h2 class="sr-only" id="memory-title" tabindex="-1">把一起走过的时光，拼成一颗爱心</h2>
+  <div class="memory-toolbar"><span>白白和鸡毛 · 一起的时光</span><button class="letter-music-toggle" id="memory-music-toggle" type="button" aria-label="暂停读信背景音乐" aria-pressed="true"><span class="music-bars" aria-hidden="true"><i></i><i></i><i></i></span><span id="memory-music-label">音乐播放中</span></button></div>
+  <div class="memory-atmosphere" aria-hidden="true"><i>✦</i><i>♡</i><i>✧</i><i>✦</i><i>♡</i><i>✧</i></div>
+  <div class="memory-stage" id="memory-stage">
+   <svg class="memory-heart" viewBox="0 0 600 600" aria-hidden="true"><defs><linearGradient id="memory-heart-pink" x2="0" y2="1"><stop stop-color="#f8d7d8"/><stop offset="1" stop-color="#e8b9c2"/></linearGradient></defs><path d="M300 532 C270 508 64 362 49 229 C34 83 205 57 300 174 C395 57 566 83 551 229 C536 362 330 508 300 532Z" fill="url(#memory-heart-pink)"/><path d="M300 549 C260 516 48 366 33 230 C16 61 204 35 300 148 C396 35 584 61 567 230 C552 366 340 516 300 549Z" fill="none" stroke="#bf8794" stroke-width="1.5" stroke-dasharray="3 8"/></svg>
+   <figure class="memory-photo" data-memory-photo><img src="assets/our-memory-01.jpg" alt="鸡毛和白白的合照 1" loading="lazy" decoding="async"></figure>
+<figure class="memory-photo" data-memory-photo><img src="assets/our-memory-02.jpg" alt="鸡毛和白白的合照 2" loading="lazy" decoding="async"></figure>
+<figure class="memory-photo" data-memory-photo><img src="assets/our-memory-03.jpg" alt="鸡毛和白白的合照 3" loading="lazy" decoding="async"></figure>
+<figure class="memory-photo" data-memory-photo><img src="assets/our-memory-04.jpg" alt="鸡毛和白白的合照 4" loading="lazy" decoding="async"></figure>
+<figure class="memory-photo" data-memory-photo><img src="assets/our-memory-05.jpg" alt="鸡毛和白白的合照 5" loading="lazy" decoding="async"></figure>
+<figure class="memory-photo" data-memory-photo><img src="assets/our-memory-06.jpg" alt="鸡毛和白白的合照 6" loading="lazy" decoding="async"></figure>
+<figure class="memory-photo" data-memory-photo><img src="assets/our-memory-07.jpg" alt="鸡毛和白白的合照 7" loading="lazy" decoding="async"></figure>
+<figure class="memory-photo" data-memory-photo><img src="assets/our-memory-08.jpg" alt="鸡毛和白白的合照 8" loading="lazy" decoding="async"></figure>
+  </div>
+  <div class="memory-copy" id="memory-copy" aria-live="polite" aria-atomic="true"><p class="eyebrow">EVERY LITTLE MOMENT, WITH YOU</p><h2 id="memory-caption">新的一岁，有我陪你走过。</h2><p id="memory-subcaption">从今天开始，也从往后的每一天开始。</p></div>
+  <div class="memory-heart-ending" id="memory-heart-ending" hidden><p class="memory-heart-note">把昨天收进心里，把明天交给我们。</p><button class="draw-button" id="memory-enter-year" type="button">点击进入新的一岁 <span aria-hidden="true">♡</span></button><span class="memory-signature">爱你的鸡毛 <img src="assets/yellow-head-cutout.png" alt="" aria-hidden="true"></span></div>
+ </section>
+</dialog>
+<dialog class="birthday-year-gate" id="birthday-year-gate" aria-labelledby="year-gate-title"><div class="year-gate-bloom" aria-hidden="true"></div><div class="year-gate-panel year-gate-left" aria-hidden="true"></div><div class="year-gate-panel year-gate-right" aria-hidden="true"></div><div class="year-gate-message"><img src="assets/birthday-next-year.jpg" alt="鸡毛捧着生日蛋糕，为白白送来惊喜"><p class="eyebrow">A NEW YEAR, WITH YOU</p><h2 id="year-gate-title" tabindex="-1">白白，23 岁快乐。</h2><p>下一年的故事，我们一起写。</p></div></dialog>
+<dialog id="minigame" aria-labelledby="game-title" aria-describedby="game-description"><div class="game-dialog-content"><button class="close" id="game-close" aria-label="稍后再玩">×</button><p class="eyebrow">A LITTLE GAME, A LITTLE LUCK</p><h2 id="game-title"></h2><p id="game-description"></p><div id="game-body"></div><p class="game-status" id="game-status" role="status" aria-live="polite"></p><button class="draw-button" id="game-action"></button><p class="game-footer">不着急，鸡毛陪你慢慢玩。</p></div></dialog>
+<dialog id="result" aria-labelledby="result-heading"><div class="result-card" tabindex="-1" autofocus><button class="close" id="close-result" aria-label="关闭中奖礼券">×</button><p class="eyebrow">A SPECIAL GIFT FOR YOU</p><h2 class="result-heading" id="result-heading">这份偏爱，翻开给白白</h2><p class="card-reveal-status" id="card-reveal-status" role="status" aria-live="polite"></p><div class="gift-card-grid result-card-grid" id="result-card-grid" aria-label="八张生日礼物卡牌"></div><div class="result-detail" id="result-detail"><span class="result-icon" id="result-icon" aria-hidden="true"></span><p class="result-kicker">小狗把好运送到啦！</p><h2 id="result-title"></h2><p class="result-desc" id="result-desc"></p><div class="ticket-divider"></div><p class="ticket-note">23 岁生日专属礼券 · 凭这份心意找鸡毛兑现 <span class="dog-head" aria-hidden="true"><img src="assets/yellow-head-cutout.png" alt=""></span></p></div><button class="draw-button" id="collect">收下这份偏爱</button></div></dialog>
+<script src="app.js"></script>
+<script src="cards.js"></script>
+<script src="scratch.js"></script>
+<script src="game-rules.js"></script>
+<script src="games.js"></script>
+<script src="finale.js"></script>
+<script src="welcome.js"></script>
+<script src="scenes.js"></script>
+<script src="memories.js"></script>
+<script src="letter.js"></script>
+</body></html>

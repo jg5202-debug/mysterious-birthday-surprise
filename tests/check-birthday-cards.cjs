@@ -1,0 +1,16 @@
+const assert=require('node:assert/strict'),vm=require('node:vm'),fs=require('node:fs');
+class Node{
+ constructor(tag='div'){this.tagName=tag.toUpperCase();this.children=[];this.dataset={};this.style={setProperty(){}};this.listeners={};this.attrs={};this.open=false;this.classes=new Set();this.classList={toggle:(v,on)=>on?this.classes.add(v):this.classes.delete(v),contains:v=>this.classes.has(v),add:v=>this.classes.add(v),remove:v=>this.classes.delete(v)};}
+ append(...nodes){this.children.push(...nodes);}replaceChildren(...nodes){this.children=nodes;}setAttribute(k,v){this.attrs[k]=v;}addEventListener(n,f){this.listeners[n]=f;}querySelector(selector){const c=selector.slice(1);for(const child of this.children){if(child.className?.split(' ').includes(c))return child;const found=child.querySelector(selector);if(found)return found;}}showModal(){this.open=true;}close(){this.open=false;}focus(){this.focused=true;}
+}
+const nodes=new Map();function get(id){if(!nodes.has(id))nodes.set(id,new Node());return nodes.get(id);}
+const prizes=Array.from({length:8},(_,i)=>({name:'礼物 '+i,icon:'♡',description:'兑现内容 '+i})),won=[],context={$:get,prizes,won,birthday:{drawLimit:3},spinning:false,setPrizeIcon:(el,icon)=>el.textContent=icon,createDogHead:()=>new Node(),setTimeout(){},clearTimeout(){},celebrate(){},matchMedia:()=>({matches:true}),document:{createElement:t=>new Node(t),querySelector:()=>get('hint'),activeElement:get('opener')},window:{addEventListener(){}}};
+vm.createContext(context);for(const file of ['cards.js','finale.js'])vm.runInContext(fs.readFileSync(__dirname+'/../src/'+file,'utf8'),context);
+const cards=context.window.BirthdayCards,finale=context.window.BirthdayFinale;
+assert(get('prize-list').children.every(c=>!c.classList.contains('is-revealed')));won.push(0);cards.render();assert.equal(get('prize-list').children.filter(c=>c.classList.contains('is-revealed')).length,1);
+won.push(1,7);cards.render();assert.equal(get('prize-list').children.filter(c=>c.classList.contains('is-revealed')).length,8);assert.equal(get('prize-list').children.filter(c=>c.classList.contains('is-earned')).length,3);assert.equal(get('prize-list').children.filter(c=>c.classList.contains('is-not-won')).length,5);
+for(let i=0;i<8;i++){const c=get('prize-list').children[i];assert.equal(c.disabled,!won.includes(i));assert(c.attrs['aria-label'].includes(won.includes(i)?'已抽中':'本次未抽中'));}
+finale.showTickets();assert.equal(get('redemption-envelope').open,true);assert.equal(get('redemption-prizes').children.length,3);assert.deepEqual(get('redemption-prizes').children.map(c=>c.children[1].children[0].textContent),['礼物 0','礼物 1','礼物 7']);
+get('redemption-close').listeners.click();assert.equal(get('redemption-envelope').open,false);assert.equal(get('opener').focused,true);
+context.spinning=true;finale.showTickets();assert.equal(get('redemption-envelope').open,false);context.spinning=false;get('result').open=true;finale.showTickets();assert.equal(get('redemption-envelope').open,false);
+assert.deepEqual(won,[0,1,7]);console.log('PASS: cards stay hidden before completion, reveal all eight after three draws, three earned and five unearned, only won tickets actionable, envelope lists actual prizes without changing draw state.');
