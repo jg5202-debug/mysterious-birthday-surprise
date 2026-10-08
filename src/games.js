@@ -7,7 +7,7 @@ window.BirthdayGames=(()=>{
  const progress=$('game-progress'),track=$('game-track');
  const portraits=['assets/puppy-head-cutout.png','assets/yellow-head-cutout.png','assets/puppy-cake.jpg','assets/welcome-white-gift.jpg'];
  const portraitNames=['小白','小金毛','生日蛋糕','生日礼盒'];
- const picture='assets/welcome-party.jpg';
+ const picture='assets/welcome-party-clean.png';
  let activeRound=-1,epoch=0,animation=0,missTimer=0,catchGame=null,memory=null,puzzle=null;
  function element(tag,className,text){const node=document.createElement(tag);if(className)node.className=className;if(text!==undefined)node.textContent=text;return node;}
  function button(text,handler,className=''){const node=element('button',className,text);node.type='button';node.addEventListener('click',handler);return node;}
