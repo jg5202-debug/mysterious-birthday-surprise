@@ -61,6 +61,7 @@ window.BirthdayLetter=(()=>{
       window.scrollTo({top:0,behavior:'instant'});
      },
      complete(){
+      window.BirthdayDelivery?.complete();
       // Keep 10cm intact through the entire photo animation and curtain reveal.
       if(savedMusic&&window.BirthdayAudio)window.BirthdayAudio.setTrack(savedMusic.track,{autoplay:savedMusic.enabled??savedMusic.playing,time:savedMusic.time});
       const target=document.querySelector('.draw-card');target.setAttribute('tabindex','-1');target.focus({preventScroll:true});

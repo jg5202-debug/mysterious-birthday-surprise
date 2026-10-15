@@ -1,0 +1,27 @@
+const assert=require('node:assert/strict');
+(async()=>{
+ const {default:worker}=await import('../build/cloudflare-source/delivery-worker.mjs'),{localD1}=await import('../scripts/local-delivery-db.mjs');
+ const db=localD1(),env={DELIVERY_DB:db,DELIVERY_ADMIN_PASSWORD:'local-test-password-32-characters',ASSETS:{fetch:async()=>new Response('static')}};
+ const base='https://birthday.example';let cookie='';
+ const call=(path,method='GET',body,options={})=>worker.fetch(new Request(base+path,{method,headers:{'Content-Type':'application/json',Origin:options.origin||base,...(cookie?{Cookie:cookie}:{}),'CF-Connecting-IP':options.ip||'192.0.2.1'},body:body===undefined?undefined:JSON.stringify(body)}),env);
+ let response=await call('/api/gift-tracking'),seed=await response.json();assert.equal(seed.revision,0);assert.equal(seed.source,'taobao-screenshot');assert.equal(seed.current.id,'330100');
+ assert.equal((await call('/api/delivery/admin')).status,401);assert.equal((await call('/api/delivery/update','PUT',{})).status,401);
+ assert.equal((await call('/api/delivery/login','POST',{password:env.DELIVERY_ADMIN_PASSWORD},{origin:'https://other.example'})).status,403);
+ for(let i=0;i<5;i++)assert.equal((await call('/api/delivery/login','POST',{password:'wrong'},{ip:'192.0.2.8'})).status,401);
+ assert.equal((await call('/api/delivery/login','POST',{password:env.DELIVERY_ADMIN_PASSWORD},{ip:'192.0.2.8'})).status,429);
+ response=await call('/api/delivery/login','POST',{password:env.DELIVERY_ADMIN_PASSWORD});assert.equal(response.status,200);const rawCookie=response.headers.get('Set-Cookie');assert(rawCookie.includes('Secure; SameSite=Strict'));assert(rawCookie.includes('HttpOnly'));cookie=rawCookie.split(';')[0];
+ let admin=await (await call('/api/delivery/admin')).json();assert(admin.cities.some(c=>c.id==='440100'));assert(!JSON.stringify(admin).includes(env.DELIVERY_ADMIN_PASSWORD));
+ const payload={id:crypto.randomUUID(),revision:0,placeId:'440100',nextPlaceId:'440300',destinationId:'440300',status:'in_transit',occurredAt:new Date().toISOString(),note:'礼物到广州啦！'};
+ assert.equal((await call('/api/delivery/update','PUT',{...payload,placeId:'not-a-city'})).status,400);
+ response=await call('/api/delivery/update','PUT',payload);assert.equal(response.status,200);let saved=await response.json();assert.equal(saved.revision,1);assert.equal(saved.current.city,'广州市');assert.equal(saved.source,'jimo-confirmed');
+ response=await call('/api/delivery/update','PUT',payload);assert.equal(response.status,200);assert.equal((await response.json()).revision,1,'Retries must not append duplicate updates.');
+ assert.equal((await call('/api/delivery/update','PUT',{...payload,id:crypto.randomUUID()})).status,409);
+ const signed={...payload,id:crypto.randomUUID(),revision:1,placeId:'440300',status:'delivered',note:'白白收到啦。'};
+ assert.equal((await call('/api/delivery/update','PUT',signed)).status,400,'Delivery needs explicit confirmation.');
+ response=await call('/api/delivery/update','PUT',{...signed,confirmDelivered:true});assert.equal(response.status,200);saved=await response.json();assert.equal(saved.status,'delivered');assert.equal(saved.current.city,'深圳市');assert.equal(saved.nextStop,null);
+ const publicData=await (await call('/api/gift-tracking')).json();assert.equal(publicData.revision,2);assert.equal(publicData.events.at(-1).description,'白白收到啦。');
+ assert(!JSON.stringify(publicData).includes('password'));assert(!JSON.stringify(publicData).includes(cookie));
+ assert.equal((await call('/api/delivery/update','PUT',{...payload,id:crypto.randomUUID(),revision:2})).status,400,'Reopening a delivered parcel needs confirmation.');
+ env.DELIVERY_ADMIN_PASSWORD='changed-local-test-password-32';assert.equal((await call('/api/delivery/admin')).status,401,'Password rotation revokes existing sessions.');
+ db.close();console.log('PASS: shared SQLite/D1 storage, login and rate limits, secure sessions, CSRF, validated cities, idempotent saves, revision conflicts, delivery confirmation and credential isolation.');
+})().catch(error=>{console.error(error);process.exitCode=1;});

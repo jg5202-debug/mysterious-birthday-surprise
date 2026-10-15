@@ -12,13 +12,16 @@ source = root / 'build/cloudflare-source'
 publish = root / 'dist/cloudflare'
 source.mkdir(parents=True, exist_ok=True)
 publish.mkdir(parents=True, exist_ok=True)
-scripts = ['app.js', 'cards.js', 'scratch.js', 'game-rules.js', 'games.js', 'finale.js', 'welcome.js', 'scenes.js', 'memories.js', 'letter.js']
-sheets = ['style.css', 'games.css', 'interactions.css', 'scenes.css', 'letter.css', 'memories.css']
+scripts = ['app.js', 'cards.js', 'scratch.js', 'game-rules.js', 'games.js', 'finale.js', 'welcome.js', 'scenes.js', 'memories.js', 'letter.js', 'delivery-config.js', 'delivery.js']
+sheets = ['style.css', 'games.css', 'interactions.css', 'scenes.css', 'letter.css', 'memories.css', 'delivery.css']
 code = {name: (base / name).read_text() for name in scripts}
 
 def patch(name, old, new):
     assert code[name].count(old) == 1, (name, old)
     code[name] = code[name].replace(old, new)
+
+patch('delivery-config.js', 'enabled:false', 'enabled:true')
+patch('delivery-config.js', "endpoint:''", "endpoint:'/api/gift-tracking'")
 
 patch('app.js', 'const dogHeadImage=new Image();', "const savedProgress=window.BirthdayProgress.boot;won=savedProgress.won.slice();remaining=remaining.filter(i=>!won.includes(i));\nconst dogHeadImage=new Image();")
 patch('app.js', 'window.BirthdayGames.consume(won.length);spinning=true;', 'window.BirthdayProgress.reservePrize(selected,won.length);window.BirthdayGames.consume(won.length);spinning=true;')
@@ -79,6 +82,16 @@ for path in files[2:]:
     dest = publish / path
     dest.parent.mkdir(parents=True, exist_ok=True)
     shutil.copyfile(base / path, dest)
+for path in ['gift-admin.html', 'gift-admin.css', 'gift-admin.js']:
+    shutil.copyfile(base / path, publish / path)
+    files.append(path)
+worker = (root / 'server/delivery-worker.js').read_text()
+worker = worker.replace('__DELIVERY_CITIES__', (root / 'server/delivery-cities.json').read_text().strip())
+worker = worker.replace('__DELIVERY_INITIAL__', (root / 'server/delivery-initial.json').read_text().strip())
+(publish / '_worker.js').write_text(worker)
+(source / 'delivery-worker.mjs').write_text(worker)
+(publish / '_routes.json').write_text(json.dumps({'version': 1, 'include': ['/api/*', '/gift-admin', '/gift-admin/', '/gift-admin.html'], 'exclude': []}))
+files.extend(['_worker.js', '_routes.json'])
 with zipfile.ZipFile(root / 'dist/cloudflare.zip', 'w', zipfile.ZIP_DEFLATED) as archive:
     for path in files:
         archive.write(publish / path, path)

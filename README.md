@@ -22,10 +22,11 @@ Progress is stored in the current browser using `localStorage`. It is not upload
 - Opening the birthday letter switches to the reading BGM. It continues through the photos and transitions; the birthday BGM returns only after the main page is revealed.
 - Background music resumes when the video is paused or finished. Browser autoplay restrictions may still require an initial interaction with the page.
 - Supports mobile touch controls, screen safe areas, and reduced-motion preferences.
+- The Cloudflare edition adds a gift delivery route after the full birthday experience. Its password-protected mobile update page lets Jimao record the current city, next stop, destination and delivery status; Baibai's view refreshes every 30 seconds. These are manually confirmed updates, not automatic carrier tracking or GPS locations.
 
 ### Run locally
 
-Requires Python 3 and Node.js 20 or later. There are no third-party runtime dependencies, so `npm install` is not required.
+Requires Python 3 and Node.js 22.13 or later. There are no third-party runtime dependencies, so `npm install` is not required.
 
 ```sh
 npm run build
@@ -41,6 +42,8 @@ npm run check
 
 `check` builds both editions, checks JavaScript syntax, and verifies mini games, gift cards, video, audio, letter transitions and browser progress persistence. GitHub Actions runs the same checks and does not automatically deploy the website.
 
+For the delivery editor and shared storage, run `npm run preview:delivery` after building. The local server at `http://127.0.0.1:4183/gift-admin` uses SQLite and the same Worker code as production. Its generated test password is stored in the ignored `work/delivery-preview-password.txt`; local test records never reach the live website.
+
 ### Project structure
 
 ```text
@@ -52,6 +55,7 @@ scripts/
   build-netlify.py          Builds the Netlify edition and offline HTML
   check.mjs                 Shared validation entry point
 tests/                      Interaction and state regression checks
+server/                     Delivery Worker, initial record and city catalog
 dist/                       Generated deployment files (not committed)
 build/                      Generated Cloudflare JavaScript (not committed)
 ```
@@ -62,6 +66,8 @@ build/                      Generated Cloudflare JavaScript (not committed)
 
 Cloudflare: run `npm run build:cloudflare`, then upload `dist/cloudflare.zip` to the Pages project, or use `dist/cloudflare/` as the static publishing directory.
 
+For delivery updates, create a Cloudflare D1 database and bind it to the Pages production environment as `DELIVERY_DB`. Add a production **secret** named `DELIVERY_ADMIN_PASSWORD` with a unique password of at least 16 characters, then deploy the new archive. The Worker initializes its tables and the user-supplied initial tracking record automatically. `/gift-admin` is the mobile editor; `/api/gift-tracking` returns the shared public record. Credentials and session tokens must never be committed. The editor uses expiring HttpOnly cookies, login throttling, origin checks, revision conflicts and explicit confirmation before marking delivery. Changing the secret invalidates existing sessions.
+
 Netlify: run `npm run build:netlify`, then upload `dist/netlify/` to Netlify. `dist/netlify.zip` is the deployment archive; `dist/birthday-offline.html` is an offline version with embedded media.
 
 The two editions have separate build outputs. Committing code does not automatically change the existing Cloudflare or Netlify websites. The repository contains no platform login information, access tokens or deployment credentials.
@@ -69,6 +75,8 @@ The two editions have separate build outputs. Committing code does not automatic
 ### Media credits
 
 This is a personal birthday gift project. The photos, letter, puppy illustrations, music and video are project assets; including them with the source does not grant redistribution rights to third-party media. Original illustration credits are preserved. Media rights remain with their respective owners.
+
+Map outlines and city centers are derived from [Alibaba Cloud DataV GeoAtlas](https://datav.aliyun.com/portal/school/atlas/area_selector). Routes are schematic city-to-city connections, not road navigation or a courier's actual travel path. The rider cutout was prepared from the user's supplied puppy illustration.
 
 ## 简体中文
 
@@ -88,12 +96,13 @@ This is a personal birthday gift project. The photos, letter, puppy illustration
 - 兑奖信封中的纸张展示实际抽中的三份礼物。
 - 刮开生日祝福，吹灭蛋糕蜡烛，观看狗狗动画。
 - 打开生日信件切换到读信 BGM，照片和转场期间继续播放，回到主页面才切回生日 BGM。
+- Cloudflare 版在完整生日流程结束后增加送礼路线图。鸡毛通过密码保护的手机更新页填写当前位置、下一站、收货城市和配送状态，白白的页面每 30 秒同步一次。记录由鸡毛确认，不是自动查询快递，也不是快递员的实时定位。
 - 暂停或结束视频后恢复背景音乐；浏览器的自动播放限制仍可能要求用户先点击页面。
 - 手机触摸交互、屏幕安全区，以及减少动态效果偏好适配。
 
 ### 本地运行
 
-需要 Python 3 和 Node.js 20 或更新版本。项目没有第三方运行时依赖，不需要 `npm install`。
+需要 Python 3 和 Node.js 22.13 或更新版本。项目没有第三方运行时依赖，不需要 `npm install`。
 
 ```sh
 npm run build
@@ -109,6 +118,8 @@ npm run check
 
 `check` 会分别构建两个版本、检查 JavaScript 语法，并验证小游戏、礼券、视频、音乐、读信转场和浏览器进度保存。GitHub Actions 运行同一套检查，不会自动发布网站。
 
+需要预览手机更新页和共享存储时，先构建，再运行 `npm run preview:delivery`，打开 `http://127.0.0.1:4183/gift-admin`。本地使用 SQLite 和同一份 Worker 代码；自动生成的测试密码保存在不提交的 `work/delivery-preview-password.txt`，测试记录不会写入线上网站。
+
 ### 项目结构
 
 ```text
@@ -120,6 +131,7 @@ scripts/
   build-netlify.py           构建 Netlify 版及离线 HTML
   check.mjs                 统一验证入口
 tests/                      交互与状态回归检查
+server/                     送礼更新服务、初始记录和城市列表
 dist/                       生成的发布文件（不提交）
 build/                      生成的 Cloudflare JavaScript（不提交）
 ```
@@ -130,6 +142,8 @@ build/                      生成的 Cloudflare JavaScript（不提交）
 
 Cloudflare：运行 `npm run build:cloudflare`，将 `dist/cloudflare.zip` 上传至 Pages 项目，或使用 `dist/cloudflare/` 作为静态发布目录。
 
+启用送礼更新页前，创建 Cloudflare D1 数据库，在 Pages 的生产环境中绑定为 `DELIVERY_DB`；添加名为 `DELIVERY_ADMIN_PASSWORD` 的生产环境 **Secret**，使用至少 16 个字符的独立密码，再发布新版压缩包。服务会自动创建数据表并载入用户提供的初始物流记录。手机入口为 `/gift-admin`，访客页面从 `/api/gift-tracking` 获取共享记录。密码和会话令牌不能提交到仓库。更新页包含登录限流、HttpOnly 过期会话、同源校验、版本冲突检查和送达确认；更换管理密码会使旧会话失效。
+
 Netlify：运行 `npm run build:netlify`，将 `dist/netlify/` 上传至 Netlify。`dist/netlify.zip` 提供打包文件；`dist/birthday-offline.html` 是嵌入媒体的离线版本。
 
 两套构建输出独立。提交代码不会自动更改现有 Cloudflare 或 Netlify 网站。仓库不包含平台登录信息、访问令牌或部署凭据。
@@ -137,3 +151,5 @@ Netlify：运行 `npm run build:netlify`，将 `dist/netlify/` 上传至 Netlify
 ### 素材说明
 
 这是一个个人生日礼物项目。照片、信件、小狗插画、音乐和视频是项目使用的素材，并不随源码提供对第三方素材的再分发授权。插画保留原有署名；媒体的相关权利归其各自权利人所有。
+
+地图轮廓和城市中心点来自[阿里云 DataV GeoAtlas](https://datav.aliyun.com/portal/school/atlas/area_selector)。路线为城市之间的示意连线，不用于道路导航，也不代表快递员的实际行驶轨迹。骑摩托的鸡毛素材由用户提供的插画抠图制作。

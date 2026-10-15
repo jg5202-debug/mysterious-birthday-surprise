@@ -14,8 +14,8 @@ def data_uri(relative_path):
     return 'data:' + mime + ';base64,' + base64.b64encode(path.read_bytes()).decode()
 
 source = (dist / 'index.html').read_text()
-sheets = ['style.css', 'games.css', 'interactions.css', 'scenes.css', 'letter.css', 'memories.css']
-scripts = ['app.js', 'cards.js', 'scratch.js', 'game-rules.js', 'games.js', 'finale.js', 'welcome.js', 'scenes.js', 'memories.js', 'letter.js']
+sheets = ['style.css', 'games.css', 'interactions.css', 'scenes.css', 'letter.css', 'memories.css', 'delivery.css']
+scripts = ['app.js', 'cards.js', 'scratch.js', 'game-rules.js', 'games.js', 'finale.js', 'welcome.js', 'scenes.js', 'memories.js', 'letter.js', 'delivery-config.js', 'delivery.js']
 assets = set(re.findall(r'''["'](assets/[^"']+)["']''', source))
 
 def assemble(embed_assets):

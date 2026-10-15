@@ -8,7 +8,8 @@
     "build:cloudflare": "python3 scripts/build-cloudflare.py",
     "build:netlify": "python3 scripts/build-netlify.py",
     "check": "node scripts/check.mjs",
-    "preview": "python3 -m http.server 4173 --directory dist/cloudflare"
+    "preview": "python3 -m http.server 4173 --directory dist/cloudflare",
+    "preview:delivery": "node scripts/preview-delivery.mjs"
   },
-  "engines": { "node": ">=20" }
+  "engines": { "node": ">=22.13" }
 }

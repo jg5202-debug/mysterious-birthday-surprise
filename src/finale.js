@@ -25,6 +25,7 @@ window.BirthdayFinale=(()=>{
    icon.className='redemption-prize-icon';setPrizeIcon(icon,prizes[prizeIndex].icon);
    title.textContent=prizes[prizeIndex].name;description.textContent=prizes[prizeIndex].description;copy.append(title,description);item.append(icon,copy);return item;
   }));
+  window.BirthdayDelivery?.sync();
   tickets.showModal();tickets.scrollTop=0;
  }
  function closeTickets(){tickets.close();ticketOpener?.focus({preventScroll:true});}

@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#f9f3e8"><meta name="robots" content="noindex,nofollow"><title>鸡毛的礼物更新页</title><link rel="icon" href="assets/puppy-favicon.svg"><link rel="stylesheet" href="gift-admin.css"></head>
+<body>
+ <header class="admin-nav"><span>鸡毛的心意专送</span><button id="logout" class="quiet" type="button" hidden>退出登录</button></header>
+ <main>
+  <section class="admin-heading"><img src="assets/chicken-courier.png" alt="鸡毛骑着小摩托送礼物"><p class="eyebrow">A LITTLE UPDATE, WITH LOVE</p><h1>今天，鸡毛送到哪啦？</h1><p>把礼物的每一步，轻轻告诉白白。</p></section>
+  <section id="login-panel" class="paper"><p class="section-kicker">鸡毛的专属入口</p><h2>先确认是鸡毛本人</h2><form id="login-form"><label for="admin-password">管理密码</label><input id="admin-password" name="password" type="password" autocomplete="current-password" placeholder="输入管理密码" minlength="16" maxlength="256" required><button id="login-submit" class="primary" type="submit">进入礼物更新页 →</button></form><p class="hint">登录后，这台手机可保持登录 7 天。</p></section>
+  <section id="editor-panel" hidden>
+   <div class="current-record paper"><span class="section-kicker">白白现在看到的记录</span><h2 id="current-city">正在读取…</h2><p id="current-status"></p><p id="current-updated" class="hint"></p></div>
+   <form id="delivery-form" class="paper update-form">
+    <div class="section-title"><span class="step-number">01</span><div><h2>礼物现在在哪座城市？</h2><p>根据你在淘宝看到的物流填写。</p></div></div>
+    <div class="quick-cities" aria-label="快捷选择城市"><button type="button" data-city="330100">杭州</button><button type="button" data-city="440100">广州</button><button type="button" data-city="440300">深圳</button></div>
+    <label for="city-search">查找城市</label><input id="city-search" type="search" placeholder="输入城市名称，例如：广州" autocomplete="off"><label for="place-id">当前城市</label><select id="place-id" required></select>
+    <div class="two-fields"><div><label for="next-place-id">下一站</label><select id="next-place-id"></select></div><div><label for="destination-id">收货城市</label><select id="destination-id" required></select></div></div>
+    <div class="section-title second"><span class="step-number">02</span><div><h2>这份心意走到哪一步啦？</h2><p>选中状态后，白白那边的文案会一起更新。</p></div></div>
+    <fieldset class="status-options"><legend class="sr-only">配送状态</legend><label><input type="radio" name="delivery-status" value="pending"><span>准备出发</span></label><label><input type="radio" name="delivery-status" value="in_transit" checked><span>运输途中</span></label><label><input type="radio" name="delivery-status" value="out_for_delivery"><span>正在派送</span></label><label><input type="radio" name="delivery-status" value="delivered"><span>白白已收到</span></label></fieldset>
+    <label for="occurred-at">这条物流的发生时间 <small>北京时间</small></label><input id="occurred-at" type="datetime-local" required>
+    <label for="delivery-note">想附上的一句话 <small>可不填</small></label><textarea id="delivery-note" rows="3" maxlength="120" placeholder="例如：礼物到广州啦，鸡毛继续向白白赶来。"></textarea>
+    <div class="live-preview"><span class="section-kicker">保存后，白白会看到</span><strong id="preview-title">鸡毛正在派送礼物</strong><p id="preview-route"></p><p id="preview-note"></p></div>
+    <button id="save-update" class="primary" type="submit">保存，告诉白白 ♡</button><p class="hint">保存后，白白的页面会在约 30 秒内同步。<br>路线是城市之间的示意连线。</p>
+   </form>
+   <section class="paper admin-history"><div class="section-title"><h2>鸡毛记下的送礼小事</h2><button id="reload-history" class="quiet" type="button">刷新记录 ↻</button></div><ol id="admin-events"></ol></section>
+   <a class="back-link" href="/">打开生日页面 ↗</a>
+  </section>
+  <p id="admin-status" class="admin-status" role="status" aria-live="polite">正在打开鸡毛的专属入口…</p>
+  <footer>礼物慢慢靠近，喜欢一直都在。<span>FROM 鸡毛, FOR 白白.</span></footer>
+ </main>
+ <dialog id="confirm-dialog"><form method="dialog"><p class="eyebrow">ONE MORE LITTLE CHECK</p><h2 id="confirm-title">确认白白已收到礼物了吗？</h2><p id="confirm-description">确认后，白白的页面会显示“白白大王的礼物已经送达”。</p><button id="confirm-save" class="primary" value="yes">确认送达并保存</button><button class="quiet cancel-confirm" value="no">还没有，再等等</button></form></dialog>
+ <script src="gift-admin.js"></script>
+</body></html>

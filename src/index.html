@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="scenes.css">
 <link rel="stylesheet" href="letter.css">
 <link rel="stylesheet" href="memories.css">
+<link rel="stylesheet" href="delivery.css">
 </head>
 <body class="welcome-active">
 <section class="welcome" id="welcome" aria-labelledby="welcome-title">
@@ -73,7 +74,23 @@
  </article>
 </section><footer><span class="footer-message">不只是生日，<br>每一个平常的日子<br class="footer-mobile-break">都有鸡毛陪你度过。</span><span class="dog-head" aria-hidden="true"><img src="assets/yellow-head-cutout.png" alt=""></span></footer>
 </main>
-<dialog id="redemption-envelope" aria-labelledby="redemption-title"><div class="redemption-content"><button class="close" id="redemption-close" type="button" aria-label="收好兑奖清单">×</button><p class="eyebrow">YOUR LITTLE LUCK, ALL IN ONE LETTER</p><div class="redemption-envelope-scene"><div class="redemption-envelope-back" aria-hidden="true"></div><div class="redemption-envelope-flap" aria-hidden="true"></div><article class="redemption-paper"><p class="redemption-paper-to">TO 白白大王 · FROM 鸡毛</p><h2 id="redemption-title">白白的生日兑奖清单</h2><p id="redemption-subtitle"></p><ol id="redemption-prizes"></ol><p class="redemption-paper-signature">每一张，都由鸡毛兑现 <img src="assets/yellow-head-cutout.png" alt="" aria-hidden="true"></p></article><div class="redemption-envelope-pocket" aria-hidden="true"><span>小白包的生日专属礼券</span><img src="assets/puppy-head-cutout.png" alt=""></div></div><button class="scene-button primary" id="redemption-done" type="button">收好这份兑奖清单</button></div></dialog>
+<dialog id="redemption-envelope" aria-labelledby="redemption-title"><div class="redemption-content"><button class="close" id="redemption-close" type="button" aria-label="收好兑奖清单">×</button><p class="eyebrow">YOUR LITTLE LUCK, ALL IN ONE LETTER</p><div class="redemption-envelope-scene"><div class="redemption-envelope-back" aria-hidden="true"></div><div class="redemption-envelope-flap" aria-hidden="true"></div><article class="redemption-paper"><p class="redemption-paper-to">TO 白白大王 · FROM 鸡毛</p><h2 id="redemption-title">白白的生日兑奖清单</h2><p id="redemption-subtitle"></p><ol id="redemption-prizes"></ol><p class="redemption-paper-signature">每一张，都由鸡毛兑现 <img src="assets/yellow-head-cutout.png" alt="" aria-hidden="true"></p></article><div class="redemption-envelope-pocket" aria-hidden="true"><span>小白包的生日专属礼券</span><img src="assets/puppy-head-cutout.png" alt=""></div></div><button class="gift-delivery-entry" id="gift-delivery-open" type="button" hidden><img src="assets/chicken-courier.png" alt=""><span>看看神秘大礼到哪啦</span><span aria-hidden="true">→</span></button><button class="scene-button primary" id="redemption-done" type="button">收好这份兑奖清单</button></div></dialog>
+<dialog id="delivery-page" aria-labelledby="delivery-title">
+ <nav class="delivery-nav" aria-label="礼物配送导航"><button class="delivery-back" id="delivery-back" type="button">← 回到中奖清单</button><span>鸡毛的心意专送 · TO 白白</span></nav>
+ <div class="delivery-shell">
+  <div class="delivery-heading"><p class="eyebrow">A LITTLE GIFT, ON ITS WAY TO YOU</p><h1 id="delivery-title" tabindex="-1">鸡毛正在派送礼物</h1><p id="delivery-subtitle">有一份藏不住的心意，正在奔向白白。</p></div>
+  <div class="delivery-layout">
+   <section class="delivery-map-card" aria-label="礼物在中国的配送位置">
+    <div class="delivery-map-heading"><span>把想念，送到你身边。</span><button id="delivery-map-toggle" type="button">查看全国地图</button></div>
+    <div class="delivery-map"><svg id="delivery-map-scene" viewBox="0 0 860 660" role="img" aria-label="礼物城市路线示意图"><image href="assets/china-delivery-map.svg" width="860" height="660"></image><path id="delivery-route-future" class="delivery-route-line" d=""></path><path id="delivery-route" class="delivery-route-traveled" d=""></path><g id="delivery-route-dots" class="delivery-route-dots"></g><g id="delivery-route-labels" class="delivery-route-labels"></g></svg><div class="delivery-marker" id="delivery-marker" hidden><img src="assets/chicken-courier.png" alt="鸡毛骑着小摩托派送礼物"><span id="delivery-marker-city"></span></div><div class="delivery-unlocated" id="delivery-unlocated"><img src="assets/chicken-courier.png" alt="骑上小摩托，鸡毛出发啦"></div></div>
+    <p class="delivery-map-note">实线为已确认节点 · 虚线为后续方向<br>城市间连线示意，非快递实时行驶轨迹</p><div class="delivery-location-strip"><i aria-hidden="true"></i><span>礼物现在在</span><strong id="delivery-location">等待物流位置更新</strong></div>
+   </section>
+   <aside class="delivery-summary" aria-label="鸡毛的派送信息"><div class="delivery-courier-id"><img src="assets/chicken-courier.png" alt="戴着头盔的鸡毛快递员"><div><small>白白大王的专属快递员</small><h2 id="delivery-courier-title">鸡毛，正在赶来。</h2></div></div><span class="delivery-status-chip" id="delivery-status-chip">礼物在路上</span><p class="delivery-eta" id="delivery-eta">再等一小会儿，惊喜就要和你见面啦。</p><p class="delivery-waybill" id="delivery-waybill"></p><button class="delivery-refresh" id="delivery-refresh" type="button">刷新送礼进度 ↻</button><p class="delivery-network" id="delivery-network" role="status" aria-live="polite"></p><a class="delivery-official" id="delivery-official" target="_blank" rel="noopener noreferrer" hidden>在顺丰查看完整物流 ↗</a></aside>
+  </div>
+  <section class="delivery-tracking" aria-labelledby="delivery-timeline-title"><div class="delivery-tracking-heading"><h2 id="delivery-timeline-title">这份心意，走过的路</h2><p id="delivery-updated">位置按快递公司的城市节点显示</p></div><ol id="delivery-events" class="delivery-events"></ol><p id="delivery-empty" class="delivery-empty">物流节点同步后，会把鸡毛走过的路，一点点记在这里。</p></section>
+  <p class="delivery-signoff">礼物会有抵达的那一天，<br>鸡毛对你的偏爱，每天都在派送。<span>FOR MY 白白, ALWAYS.</span></p>
+ </div>
+</dialog>
 <dialog id="birthday-finale" aria-labelledby="finale-title"><div class="finale-content"><p class="eyebrow">ALL YOUR LITTLE LUCK, WITH LOVE</p><div class="envelope-scene" aria-label="三张生日礼券收进信封"><div class="envelope-back"></div><div id="envelope-tickets"></div><div class="envelope-pocket"></div><div class="envelope-flap"></div><span class="dog-head envelope-seal" aria-hidden="true"><img src="assets/yellow-head-cutout.png" alt=""></span><span class="envelope-label">TO 小白包 · FROM 鸡毛</span></div><h2 id="finale-title">礼物都拆完啦，<br>快找鸡毛大王兑奖吧！</h2><p>三份小幸运装好啦，每一张都由鸡毛兑现。</p><button class="draw-button" id="finale-close">收好礼券，看看鸡毛的信</button></div></dialog>
 <dialog id="birthday-letter-ending" aria-labelledby="letter-arrival-title">
  <section class="letter-arrival" id="letter-arrival">
@@ -135,4 +152,6 @@
 <script src="scenes.js"></script>
 <script src="memories.js"></script>
 <script src="letter.js"></script>
+<script src="delivery-config.js"></script>
+<script src="delivery.js"></script>
 </body></html>
