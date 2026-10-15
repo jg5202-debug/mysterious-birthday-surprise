@@ -4,6 +4,11 @@ const assert=require('node:assert/strict');
  const db=localD1(),env={DELIVERY_DB:db,DELIVERY_ADMIN_PASSWORD:'local-test-password-32-characters',ASSETS:{fetch:async()=>new Response('static')}};
  const base='https://birthday.example';let cookie='';
  const call=(path,method='GET',body,options={})=>worker.fetch(new Request(base+path,{method,headers:{'Content-Type':'application/json',Origin:options.origin||base,...(cookie?{Cookie:cookie}:{}),'CF-Connecting-IP':options.ip||'192.0.2.1'},body:body===undefined?undefined:JSON.stringify(body)}),env);
+ // Emulate Pages' automatic .html canonical redirect, which must never loop.
+ env.ASSETS.fetch=async request=>new URL(request.url).pathname==='/gift-admin.html'?Response.redirect(base+'/gift-admin',301):new Response('admin page');
+ for(const path of ['/gift-admin','/gift-admin/','/gift-admin.html']){
+  const page=await call(path);assert.equal(page.status,200,'Admin routes must serve without a canonical redirect loop.');assert.equal(await page.text(),'admin page');assert.equal(page.headers.get('X-Frame-Options'),'DENY');assert.equal(page.headers.get('Cache-Control'),'no-store');
+ }
  let response=await call('/api/gift-tracking'),seed=await response.json();assert.equal(seed.revision,0);assert.equal(seed.source,'taobao-screenshot');assert.equal(seed.current.id,'330100');
  assert.equal((await call('/api/delivery/admin')).status,401);assert.equal((await call('/api/delivery/update','PUT',{})).status,401);
  assert.equal((await call('/api/delivery/login','POST',{password:env.DELIVERY_ADMIN_PASSWORD},{origin:'https://other.example'})).status,403);
