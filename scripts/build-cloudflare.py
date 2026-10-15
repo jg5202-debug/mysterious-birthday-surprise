@@ -88,6 +88,7 @@ for path in ['gift-admin.html', 'gift-admin.css', 'gift-admin.js']:
 worker = (root / 'server/delivery-worker.js').read_text()
 worker = worker.replace('__DELIVERY_CITIES__', (root / 'server/delivery-cities.json').read_text().strip())
 worker = worker.replace('__DELIVERY_INITIAL__', (root / 'server/delivery-initial.json').read_text().strip())
+worker = worker.replace('__DELIVERY_ADMIN_HTML__', json.dumps((base / 'gift-admin.html').read_text(), ensure_ascii=False))
 (publish / '_worker.js').write_text(worker)
 (source / 'delivery-worker.mjs').write_text(worker)
 (publish / '_routes.json').write_text(json.dumps({'version': 1, 'include': ['/api/*', '/gift-admin', '/gift-admin/', '/gift-admin.html'], 'exclude': []}))

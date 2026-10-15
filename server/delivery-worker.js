@@ -1,6 +1,7 @@
 // Bundled into the Cloudflare edition only. Secrets stay in Cloudflare bindings.
 const CITIES=__DELIVERY_CITIES__;
 const INITIAL=__DELIVERY_INITIAL__;
+const ADMIN_HTML=__DELIVERY_ADMIN_HTML__;
 const PLACES=new Map(CITIES.map(place=>[place.id,place]));
 const COOKIE='__Host-jimo_delivery';
 const ready=new WeakMap();
@@ -105,9 +106,8 @@ export default {
    }catch(error){return json({error:error.status?error.message:'暂时没有保存成功，请稍后再试。'},error.status||503);}
   }
   if(path==='/gift-admin'||path==='/gift-admin/'||path==='/gift-admin.html'){
-   // Pages redirects .html assets to their extensionless URL. Fetch that URL
-   // directly so the public admin route does not redirect back to itself.
-   const asset=new URL('/gift-admin',url);const response=await env.ASSETS.fetch(new Request(asset,request));
+   // Serve the bundled page directly, avoiding Pages' .html canonical redirects.
+   const response=new Response(ADMIN_HTML,{headers:{'Content-Type':'text/html; charset=utf-8'}});
    const headers=new Headers(response.headers);headers.set('Cache-Control','no-store');headers.set('X-Robots-Tag','noindex, nofollow');headers.set('X-Frame-Options','DENY');headers.set('Referrer-Policy','no-referrer');headers.set('Content-Security-Policy',"default-src 'self'; img-src 'self' data:; script-src 'self'; style-src 'self'; connect-src 'self'; frame-ancestors 'none'; form-action 'self'; base-uri 'none'");
    return new Response(response.body,{status:response.status,headers});
   }

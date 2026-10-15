@@ -7,7 +7,7 @@ const assert=require('node:assert/strict');
  // Emulate Pages' automatic .html canonical redirect, which must never loop.
  env.ASSETS.fetch=async request=>new URL(request.url).pathname==='/gift-admin.html'?Response.redirect(base+'/gift-admin',301):new Response('admin page');
  for(const path of ['/gift-admin','/gift-admin/','/gift-admin.html']){
-  const page=await call(path);assert.equal(page.status,200,'Admin routes must serve without a canonical redirect loop.');assert.equal(await page.text(),'admin page');assert.equal(page.headers.get('X-Frame-Options'),'DENY');assert.equal(page.headers.get('Cache-Control'),'no-store');
+  const page=await call(path);assert.equal(page.status,200,'Admin routes must serve without a canonical redirect loop.');assert.equal(await page.text(),require('node:fs').readFileSync(__dirname+'/../src/gift-admin.html','utf8'));assert.equal(page.headers.get('X-Frame-Options'),'DENY');assert.equal(page.headers.get('Cache-Control'),'no-store');
  }
  let response=await call('/api/gift-tracking'),seed=await response.json();assert.equal(seed.revision,0);assert.equal(seed.source,'taobao-screenshot');assert.equal(seed.current.id,'330100');
  assert.equal((await call('/api/delivery/admin')).status,401);assert.equal((await call('/api/delivery/update','PUT',{})).status,401);
