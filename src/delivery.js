@@ -34,7 +34,8 @@ window.BirthdayDelivery=(()=>{
   const size=box[2]/(scene.getBoundingClientRect?.().width||400)*11;
   $('delivery-route-dots').replaceChildren(...points.map(p=>{const dot=document.createElementNS(svgNS,'circle');dot.setAttribute('cx',p.x);dot.setAttribute('cy',p.y);dot.setAttribute('r',size*.25);return dot;}));
   const sameDestination=next&&destination&&Math.hypot(next.x-destination.x,next.y-destination.y)<.2;
-  const labels=[{point:origin,label:'出发 · '+(data.origin?.city||''),dy:-12},{point:sameDestination?null:next,label:'下一站 · '+(data.nextStop?.city||''),dy:-12},{point:destination,label:(sameDestination?'下一站，白白在 · ':'白白在 · ')+(data.destination?.city||''),dy:18}].filter(item=>item.point);
+  const atOrigin=current&&origin&&Math.hypot(current.x-origin.x,current.y-origin.y)<.2;
+  const labels=[{point:atOrigin?null:origin,label:'出发 · '+(data.origin?.city||''),dy:-12},{point:sameDestination?null:next,label:'下一站 · '+(data.nextStop?.city||''),dy:-12},{point:destination,label:(sameDestination?'下一站，白白在 · ':'白白在 · ')+(data.destination?.city||''),dy:18}].filter(item=>item.point);
   $('delivery-route-labels').replaceChildren(...labels.map(item=>{const g=document.createElementNS(svgNS,'g'),circle=document.createElementNS(svgNS,'circle'),label=document.createElementNS(svgNS,'text');circle.setAttribute('cx',item.point.x);circle.setAttribute('cy',item.point.y);circle.setAttribute('r',size*.3);label.setAttribute('x',item.point.x+size*.7);label.setAttribute('y',item.point.y+item.dy*size/11);label.setAttribute('font-size',size);label.textContent=item.label;g.append(circle,label);return g;}));
   const marker=$('delivery-marker');marker.hidden=!current;
   if(current){marker.style.left=((current.x-box[0])/box[2]*100)+'%';marker.style.top=((current.y-box[1])/box[3]*100)+'%';text('delivery-marker-city',data.current.city);}
